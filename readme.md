@@ -8,7 +8,7 @@ Official implementation of the ZenQ APIs for Python 3.8+
 2. [Installation](#installation)
 3. [Classes](#classes)
 4. [Signatures](#signatures)
-5. [Ticker helper](#Ticker helper)
+5. [Tickers](#Tickers)
 6. [Methods](#methods)
    - [place_limit_order](#place_limit_order)
    - [place_market_order](#place_market_order)
@@ -87,7 +87,7 @@ obj_response_from_api.Equity
 ```
 
 ---
-## **Ticker helper**
+## **Tickers**
 All methods that have `ApiTickerID` can accept a usefull object that library can offer.
 For use it you have to import the tickers class like:
 
