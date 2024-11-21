@@ -205,13 +205,19 @@ class APIUserBalances:
                  error: Optional[str] = "",
                  is_error: bool = False):
         """
-        The init class for unified response.
+        Standard response from user balances api.
 
         :param status_code: The raw status code of server response.
-        :param order_id: The order_id code from server response if valorized otherwise is 0.
-        :param message: The message of server response, it contains the content, also errors.
+        :param customerId: The unique identifier for the customer associated with the response.
+        :param Balances: A detailed representation of the user's account balances.
+        :param Positions: Information about the user's open positions in various instruments or assets.
+        :param Equity: The user's total equity, representing the value of all assets minus liabilities.
+        :param Totals: Aggregated financial data, summarizing key metrics such as balances and equity.
+        :param TotalBySecurityType: Breakdown of totals categorized by security type (e.g., stocks, bonds).
+        :param error: Error details or messages, if any, returned by the API.
         :param is_error: A flag that is True if the call returned a not 2XX code.
         """
+
         self.status_code: str = status_code
         self.customerId: Optional[str] = customerId
         self.Balances: Optional[str] = Balances

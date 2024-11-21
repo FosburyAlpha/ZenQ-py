@@ -103,7 +103,7 @@ class Client:
 
         return APIStandardResponse.from_place_order_market_dict(content)
 
-    def search_ticker(self, symbol: Union[int, str]) -> APIStandardResponse:
+    def search_ticker(self, symbol: Union[int, str, Ticker]) -> APIStandardResponse:
         """
         Retrieve information about a specific symbol, either by its string representation (e.g., "BTC") or its ID.
         
