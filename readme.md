@@ -95,7 +95,7 @@ For use it you have to import the tickers class like:
 from api.tickers import *
 ```
 
-And then you have the all zenq's tickers property ready to use.
+And then you have the all ZenQ's tickers property ready to use.
 ```python
 BTCUSDT -> Object
 BTCUSDT.ticker_id -> The serialized apiTickerID (BTCUSDT=32777)
@@ -300,7 +300,7 @@ print(response.data)
 
 ### **License**
 
-Copyright 2024 Zenq
+Copyright 2024 ZenQ
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
