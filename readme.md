@@ -24,10 +24,11 @@ This library allows interaction with the **ZenQ Exchange**, enabling order manag
 ---
 
 ## **Installation**
-The installation can be performed by use the `pip install` command along with the Git repository URL
+The installation can be performed by use the `pip install` command.
+At first download file with .whl extension.
 
 ```bash
-pip install path_to_library/library_file.whl
+pip install downloaded_file.whl
 ```
 Ensure that API variables are properly configured in the `config.py` file.
 
