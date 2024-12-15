@@ -7,9 +7,7 @@ Official implementation of the ZenQ APIs for Python 3.8+
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Classes](#classes)
-4. [Signatures](#signatures)
-5. [Tickers](#Tickers)
-6. [Methods](#methods)
+4. [Methods](#methods)
    - [place_limit_order](#place_limit_order)
    - [place_market_order](#place_market_order)
    - [search_ticker](#search_ticker)
@@ -29,82 +27,53 @@ This library allows interaction with the **ZenQ Exchange**, enabling order manag
 The installation can be performed by use the `pip install` command along with the Git repository URL
 
 ```bash
-pip install git+https://github.com/FosburyAlpha/ZenQ-py.git
+pip install path_to_library/library_file.whl
 ```
+Ensure that API variables are properly configured in the `config.py` file.
 
 ---
+## **Usage**
+Fast and basic example, check below for methods details.
+```python
+# import client for manage connection to Zenq
+from zenqapi import Client 
 
-## **Client initialization**
+# create an object client
+client = Client(apiSecret="aaa", apiKey="bbb", test=True)
 
+# import a specific ticker or * for all ticker available on exchange
+from zenqapi import BTCUSDC
+
+# base call to exchange
+client.search_ticker(BTCUSDC)
+
+from zenqapi import *
+client.search_ticker(ETHUSDT)
+
+```
+
+## **Classes**
+
+### **`Client`**
 The main class to interact with the Zenq API.
 
-Create a client instance to enable API management:
-
+#### **Constructor**
 ```python
-client = Client(apiKey= "xxx", apiSecret= "yyy")
+from zenqapi import Client
+
+client = Client(apiSecret="aaa", apiKey="bbb", test=True)
 ```
 
 - **Parameters**
   - `apiKey` (str): API key generated from the exchange.
   - `apiSecret` (str): API secret key associated with the API key.
-  - `test` (optional bool): Flag to specify the environment True = test environment, False = production. By default, value is False.
+  - `test` (bool, optional): Flag to specify the environment (True = test environment, False = production).
 
 ---
-## **Signatures**
 
-There are two main signatures returned by methods:
-- `APIStandardResponse`
-- `APIUserBalances`
-
-### **1. APIStandardResponse**
-All methods have this type of object as response.
-
-- **Attributes**
-  - `status_code` (str): The raw status code of server response.
-  - `order_id` (str): The order_id code from server response if valorized otherwise is 0.
-  - `message` (str): The message of server response, it contains the content, also errors.
-  - `is_error` (bool): A flag that is True if the call returned a not 2XX code.
-
-```python
-obj_response_from_api.message
-```
-
-
-### **2. APIUserBalances**
-Only user_balances method have this type of object as response.
-
-- **Attributes**
-  - `status_code` (str): The raw status code of server response.
-  - `customerId` (str): The unique identifier for the customer associated with the response.
-  - `Balances` (str): A detailed representation of the user's account balances.
-  - `Positions` (str): Information about the user's open positions in various instruments or assets.
-  - `Equity` (str): The user's total equity, representing the value of all assets minus liabilities.
-  - `Totals` (str): Aggregated financial data, summarizing key metrics such as balances and equity.
-  - `error` (str): Error details or messages, if any, returned by the API.
-  - `is_error` (bool): A flag that is True if the call returned a not 2XX code.
-```python
-obj_response_from_api.Equity
-```
-
----
-## **Tickers**
-All methods that have `ApiTickerID` can accept a usefull object that library can offer.
-For use it you have to import the tickers class like:
-
-```python
-from api.tickers import *
-```
-
-And then you have the all ZenQ's tickers property ready to use.
-```python
-BTCUSDT -> Object
-BTCUSDT.ticker_id -> The serialized apiTickerID (BTCUSDT=32777)
-BTCUSDT.ticker_name -> The serialized apiTickerID (BTCUSDT="BTCUSDT")
-```
-
----
 ## **Methods**
 
+---
 
 ### **1. place_limit_order**
 
@@ -113,15 +82,14 @@ Places a limit order on the exchange by specifying quantity, price, order type, 
 
 #### **Signature**
 ```python
-place_limit_order(apiQuantity: float, apiOrderType: Union[int, str], apiPrice: float, apiTickerId: Union[int, str, Ticker]) -> APIStandardResponse
+place_limit_order(apiQuantity: float, apiOrderType: Union[int, str], apiPrice: float, apiTickerId: Union[int, str]) -> APIStandardResponse
 ```
 
 #### **Parameters**
 - `apiQuantity` (float): Quantity of the order in base token units.
 - `apiOrderType` (Union[int, str]): Type of the order (e.g., "buy", "sell", 1, or -1).
 - `apiPrice` (float): Price limit for the order.
-- `apiTickerId` (Union[int, str, Ticker]): This can be a string, the ticker ID from the Zenq exchange, or the ticker Object from library.
-                       E.g. ADAUSDC, "ADAUSDC", 40895, ADAUSDC.ticker_id
+- `apiTickerId` (Union[int, str]): Ticker identifier (e.g., "BTCUSDT" or internal ticker ID).
 
 #### **Exceptions**
 - `ValueError`: Raised if `apiOrderType` or `apiTickerId` is invalid.
@@ -135,7 +103,8 @@ place_limit_order(apiQuantity: float, apiOrderType: Union[int, str], apiPrice: f
 
 #### **Example**
 ```python
-response = client.place_limit_order(apiQuantity=1.0, apiOrderType="buy", apiPrice=50000, apiTickerId=BTCUSDT)
+client = Client(apiKey="your_key", apiSecret="your_secret", test=True)
+response = client.place_limit_order(apiQuantity=1.0, apiOrderType="buy", apiPrice=50000, apiTickerId="BTCUSDT")
 print(response.message)
 ```
 
@@ -148,14 +117,13 @@ Places a market order on the exchange.
 
 #### **Signature**
 ```python
-place_market_order(apiQuantity: float, apiOrderType: Union[int, str], apiTickerId: Union[int, str, Ticker]) -> APIStandardResponse
+place_market_order(apiQuantity: float, apiOrderType: Union[int, str], apiTickerId: int) -> APIStandardResponse
 ```
 
 #### **Parameters**
 - `apiQuantity` (float): Quantity of the order.
 - `apiOrderType` (Union[int, str]): Type of the order (e.g., "buy", "sell", 1, or -1).
-- `apiTickerId` (Union[int, str, Ticker]): This can be a string, the ticker ID from the Zenq exchange, or the ticker Object from library.
-                       E.g. ADAUSDC, "ADAUSDC", 40895, ADAUSDC.ticker_id
+- `apiTickerId` (int): Ticker identifier.
 
 #### **Return**
 See `place_limit_order`.
@@ -175,12 +143,11 @@ Retrieves information about a specific symbol.
 
 #### **Signature**
 ```python
-search_ticker(symbol: Union[int, str, Ticker]) -> APIStandardResponse
+search_ticker(symbol: Union[int, str]) -> APIStandardResponse
 ```
 
 #### **Parameters**
-- `symbol` (Union[int, str, Ticker]): This can be a string, the ticker ID from the Zenq exchange, or the ticker Object from library.
-                       E.g. ADAUSDC, "ADAUSDC", 40895, ADAUSDC.ticker_id
+- `symbol` (Union[int, str]): Symbol or ticker ID (e.g., "BTCUSDT").
 
 #### **Return**
 See `place_limit_order`.
@@ -200,12 +167,11 @@ Fetches a filtered list of orders, optionally filtered by ticker ID or order ID.
 
 #### **Signature**
 ```python
-order_list(apiTickerId: Union[int, str, Ticker] = "", orderId: str = "") -> APIStandardResponse
+order_list(apiTickerId: Union[int, str] = "", orderId: str = "") -> APIStandardResponse
 ```
 
 #### **Parameters**
-- `apiTickerId` (Union[int, str, Ticker], optional): Ticker ID to filter by. This can be a string, the ticker ID from the Zenq exchange, or the ticker Object from library.
-                       E.g. ADAUSDC, "ADAUSDC", 40895, ADAUSDC.ticker_id
+- `apiTickerId` (Union[int, str], optional): Ticker ID to filter by.
 - `orderId` (str, optional): Specific order ID to filter by.
 
 #### **Return**
@@ -213,7 +179,7 @@ See `place_limit_order`.
 
 #### **Example**
 ```python
-response = client.order_list()
+response = client.order_list(apiTickerId="BTCUSDT")
 print(response.message)
 ```
 
@@ -234,8 +200,7 @@ order_modify(orderId: str, newPrice: float, newQuantity: float, marketValue: flo
 - `newPrice` (float): New price for the order.
 - `newQuantity` (float): New quantity for the order.
 - `marketValue` (float): Current market value for validation.
-- `apiTickerId` (Union[int, str], optional): This can be a string, the ticker ID from the Zenq exchange, or the ticker Object from library.
-                       E.g. ADAUSDC, "ADAUSDC", 40895, ADAUSDC.ticker_id
+- `apiTickerId` (Union[int, str], optional): Ticker ID.
 
 #### **Return**
 See `place_limit_order`.
@@ -255,13 +220,12 @@ Cancels an existing order.
 
 #### **Signature**
 ```python
-order_cancel(orderId: str, apiTickerId: Union[int, str, Ticker] = "") -> APIStandardResponse
+order_cancel(orderId: str, apiTickerId: Union[int, str] = "") -> APIStandardResponse
 ```
 
 #### **Parameters**
 - `orderId` (str): Unique identifier of the order to cancel.
-- `apiTickerId` (Union[int, str, Ticker], optional): This can be a string, the ticker ID from the Zenq exchange, or the ticker Object from library.
-                       E.g. ADAUSDC, "ADAUSDC", 40895, ADAUSDC.ticker_id
+- `apiTickerId` (Union[int, str], optional): Ticker ID.
 
 #### **Return**
 See `place_limit_order`.
@@ -300,7 +264,7 @@ print(response.data)
 
 ### **License**
 
-Copyright 2024 ZenQ
+Copyright 2024 Zenq
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -313,4 +277,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-

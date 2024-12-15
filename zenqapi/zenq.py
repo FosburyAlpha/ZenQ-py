@@ -1,9 +1,9 @@
 import json
 import requests
-from api.config import *
-from api.serializer import *
-from api.utils import filter_order
-from signatures.response import APIStandardResponse, APIUserBalances
+from _config import *
+from _serializer import *
+from _utils import filter_order
+from .signatures.response import APIStandardResponse, APIUserBalances
 
 
 class Client:
@@ -103,7 +103,7 @@ class Client:
 
         return APIStandardResponse.from_place_order_market_dict(content)
 
-    def search_ticker(self, symbol: Union[int, str, Ticker]) -> APIStandardResponse:
+    def search_ticker(self, symbol: Union[int, str]) -> APIStandardResponse:
         """
         Retrieve information about a specific symbol, either by its string representation (e.g., "BTC") or its ID.
         

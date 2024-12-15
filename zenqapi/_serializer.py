@@ -1,5 +1,5 @@
 from typing import Union
-from api.tickers import dct_all_ticker_info, Ticker
+from tickers import dct_all_ticker_info, Ticker
 
 
 def from_textual_order_type_to_integer_order_type(apiOrderType: Union[str, int]) -> int:
